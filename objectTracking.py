@@ -56,11 +56,12 @@ def objectTracking(rawVideo):
                 #Loop for every feature?
                     #newX,newY = estimateFeatureTranslation(startXs,startYs,Ix,Iy,prevFrame,frame)
 
-                #Xs,Ys,newbbox = applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox)
-                #bbox = newbbox
+                # Final Transformation of Feature Positions and Box
+                Xs,Ys,newbbox = applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox)
                 
-                # PLACEHOLDER (DELETE WHEN NEWBOX EXISTS)
-                bbox = rectangleCreation(frame)
+                # Update Feature Positions and Bounding Box for Next Frame
+                startXs,startYs = Xs,Ys
+                bbox = newbbox
             
             # Draws the Rectangle on the RGB Frame
             bboxImg = cv2.rectangle(frame, (bbox[0,0],bbox[0,1]), (bbox[3,0], bbox[3,1]), (0,0,255), 2)
