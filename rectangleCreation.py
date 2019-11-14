@@ -9,6 +9,5 @@ import numpy as np
 def rectangleCreation(frame):
     x,y,w,h = 145,160,55,80  # Rectangle position and dimension
     bbox = np.array([[x,y],[x+w,y],[x,y+h],[x+w,y+h]])
-    bboxImg = cv2.rectangle(frame, (x,y), (x+w, y+h), (0,0,255), 2)  # Draws the Rectangle on the Frame
     
-    return bbox,bboxImg
+    return bbox
