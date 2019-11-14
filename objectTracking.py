@@ -25,11 +25,10 @@ def objectTracking(rawVideo):
     
     # Loop Through Video Frames
     countFrame = 0
-    frameCollection = np.zeros((height,width,3,n_frames+1))
     pathHistory = []
     while(True): 
         frameFound, frame = rawVideo.read()  # Extract Current Frame
-        frameCollection[:,:,:,countFrame] = frame
+        
         if (frameFound):                     # If frames remain in the video
             grayFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # Convert frame to grayscale
             
@@ -41,18 +40,21 @@ def objectTracking(rawVideo):
                 # Feature Detection
                 startXs,startYs = getFeatures(grayFrame,bbox)
 
-                # Plot Feature Detection
+                # Plot Feature Detection on first frame bounded region
                 plt.imshow(frame[:,:,[2,1,0]])
-                featureImg = plt.scatter(startXs, startYs, c='b', s=5)
+                featureImg = plt.scatter(startXs, startYs, c='b', s=2)
             
             # If this frame is after the first frame in the video
-            else:
+            else:                
                 # Overall Tracking
-                #newXs,newYs = estimateAllTranslation(startXs,startYs,frameCollection[:,:,:,countFrame-1],frameCollection[:,:,:,countFrame])
+                newXs,newYs = estimateAllTranslation(startXs,startYs,prevFrame,frame)
                 
                 # Feature Tracking
+                # Sobel Gradient Filters
+                Ix = cv2.Sobel(grayFrame,cv2.CV_64F,1,0,ksize=5)
+                Iy = cv2.Sobel(grayFrame,cv2.CV_64F,0,1,ksize=5)
                 #Loop for every feature?
-                    #newX,newY = estimateFeatureTranslation(startXs,startYs,Ix,Iy,frameCollection[:,:,:,countFrame-1],frameCollection[:,:,:,countFrame])
+                    #newX,newY = estimateFeatureTranslation(startXs,startYs,Ix,Iy,prevFrame,frame)
 
                 #Xs,Ys,newbbox = applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox)
                 #bbox = newbbox
@@ -69,7 +71,9 @@ def objectTracking(rawVideo):
             # Add a new frame with bounded box
             trackedVideo.write(bboxImg)
             
-            # Iterate for frameCollection history
+            # Iterate for frame history
+            prevFrame = frame
+            prevGrayFrame = grayFrame
             countFrame += 1
         else:
             break
