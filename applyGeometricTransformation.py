@@ -8,10 +8,50 @@
 # (OUTPUT) Ys: N1xF matrix representing the Y coordinates of the remaining features in all the bounding boxes after eliminating outliers
 # (OUTPUT) newbbox: Fx4x2 the bounding box position after geometric transformation
 
-
+import skimage.transform as tf
+import numpy as np
 
 def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox):
     
+    # Max allowed pixel distance between start and new location
+    threshold = 4
     
-    return Xs,Ys,newbbox
+    # Loop Through Feature Points
+    i = 0
+    sum_shift_x = 0
+    sum_shift_y = 0
+    while(i < len(startXs)):
+    
+        # If the change in feature position exceeds 4 pixels in x or y
+        if ((newXs[i] - startXs[i] > threshold) | (newYs[i] - startYs[i] > threshold)):
+            # Elimate the Feature Point across all lists
+            newXs = np.delete(newXs,i)
+            newYs = np.delete(newYs,i)
+            startXs = np.delete(startXs,i)
+            startYs = np.delete(startYs,i)
+            
+        # If the feature position change is acceptable
+        else:
+            # Sum the shifts in x and y
+            sum_shift_x = sum_shift_x + newXs[i] - startXs[i]
+            sum_shift_y = sum_shift_y + newYs[i] - startYs[i]
+            i += 1
+    
+    # Find average of the x and y feature shifts
+    if (i != 0):
+        avg_shift_x = sum_shift_x / i
+        avg_shift_y = sum_shift_y / i
+    else:
+        avg_shift_x = 0
+        avg_shift_y = 0
+    
+    # Translate bounding box relative to feature movement
+    shiftMatrix = np.zeros((4,2))
+    shiftMatrix[:,0] = avg_shift_x
+    shiftMatrix[:,1] = avg_shift_y
+    newbbox = bbox + shiftMatrix
+    newbbox = np.int16(newbbox)
+    
+    
+    return newXs,newYs,newbbox
 
