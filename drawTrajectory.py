@@ -1,9 +1,9 @@
 
-# (INPUT)
-# (INPUT)
-# (INPUT)
-# (OUTPUT)
-# (OUTPUT)
+# (INPUT) bbox: 4x2xF matrix of the bounding box coordinates
+# (INPUT) bboxImg: HxWx3 matrix of the current image with the bounding box
+# (INPUT) pathHistory: 2xN list of center coordinates of the bounding boxes
+# (OUTPUT) bboxImg: Updated with all centers from past and current frames
+# (OUTPUT) pathHistory: Appended with newest center coordinates
 
 import cv2
 
