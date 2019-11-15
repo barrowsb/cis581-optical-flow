@@ -39,32 +39,66 @@ def objectTracking(rawVideo):
     
                 # Feature Detection
                 startXs,startYs = getFeatures(grayFrame,bbox)
+                r,c,n_box = bbox.shape
+                if (n_box == 2):
+                    startXs1 = startXs[:,0]
+                    startYs1 = startYs[:,0]
+                    startXs2 = startXs[:,1]
+                    startYs2 = startYs[:,1]
 
                 # Plot Feature Detection on first frame bounded region
                 plt.imshow(frame[:,:,[2,1,0]])
                 featureImg = plt.scatter(startXs, startYs, c='b', s=2)
             
             # If this frame is after the first frame in the video
-            else:                
-                # Overall Tracking
-                newXs,newYs = estimateAllTranslation(startXs,startYs,prevFrame,frame)
-                
-                # Feature Tracking
+            else:               
                 # Sobel Gradient Filters
                 Ix = cv2.Sobel(grayFrame,cv2.CV_64F,1,0,ksize=5)
                 Iy = cv2.Sobel(grayFrame,cv2.CV_64F,0,1,ksize=5)
-                #Loop for every feature?
-                    #newX,newY = estimateFeatureTranslation(startXs,startYs,Ix,Iy,prevFrame,frame)
+                
+                r,c,n_box = bbox.shape
+                newbbox = np.zeros(shape=(4,2,n_box))
 
-                # Final Transformation of Feature Positions and Box
-                Xs,Ys,newbbox = applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox)
+                if (n_box == 1):  # For 1 Box
+                    
+                    # Overall Translation
+                    newXs,newYs = estimateAllTranslation(startXs,startYs,prevFrame,frame)
+                    
+                    # Feature Translation
+                    #newX,newY = estimateFeatureTranslation(startXs,startYs,Ix,Iy,prevFrame,frame)
+                    
+                    # Final Transformation of Feature Positions and Box
+                    Xs,Ys,newbbox = applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox)
+                    
+                    startXs,startYs = Xs,Ys
+                    
+                if (n_box == 2):  # For 2 Boxes
+                    
+                    
+                    # Overall Translation
+                    newXs1,newYs1 = estimateAllTranslation(startXs1,startYs1,prevFrame,frame)
+                    newXs2,newYs2 = estimateAllTranslation(startXs2,startYs2,prevFrame,frame)
+                    
+                    # Feature Translation
+                    #newX,newY = estimateFeatureTranslation(startXs,startYs,Ix,Iy,prevFrame,frame)
+                    #newX,newY = estimateFeatureTranslation(startXs,startYs,Ix,Iy,prevFrame,frame)
+        
+                    # Final Transformation of Feature Positions and Box
+                    Xs1,Ys1,newbbox[:,:,0] = applyGeometricTransformation(startXs1,startYs1,newXs1,newYs1,bbox[:,:,0])
+                    Xs2,Ys2,newbbox[:,:,1] = applyGeometricTransformation(startXs2,startYs2,newXs2,newYs2,bbox[:,:,1])
+                
+                    startXs1,startYs1 = Xs1,Ys1
+                    startXs2,startYs2 = Xs2,Ys2
                 
                 # Update Feature Positions and Bounding Box for Next Frame
-                startXs,startYs = Xs,Ys
                 bbox = newbbox
             
-            # Draws the Rectangle on the RGB Frame
-            bboxImg = cv2.rectangle(frame, (bbox[0,0],bbox[0,1]), (bbox[3,0], bbox[3,1]), (0,0,255), 2)
+            # Draws the Rectangle(s) on the RGB Frame
+            point,dimension,n_box = bbox.shape
+            indivBoxFrame = frame
+            for i in range(n_box):
+                bboxImg = cv2.rectangle(indivBoxFrame, (int(bbox[0,0,i]),int(bbox[0,1,i])), (int(bbox[3,0,i]), int(bbox[3,1,i])), (0,0,255), 2)
+                indivBoxFrame = bboxImg
             
             # Draw persistent centroids of the bounding box for the trajectory
             bboxImg,pathHistory = drawTrajectory(bbox,bboxImg,pathHistory)
@@ -79,5 +113,5 @@ def objectTracking(rawVideo):
         else:
             break
     
-    
+
     return trackedVideo
