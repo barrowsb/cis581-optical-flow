@@ -6,11 +6,22 @@
 # (OUTPUT) pathHistory: Appended with newest center coordinates
 
 import cv2
+import math
+import numpy as np
 
 def drawTrajectory(bbox,bboxImg,pathHistory):
-    center = (int(bbox[0,0] + (bbox[1,0] - bbox[0,0])/2), int(bbox[0,1] + (bbox[2,1] - bbox[0,1])/2))
-    pathHistory.append(center)
-    for centroid in range(len(pathHistory)):
-        bboxImg = cv2.circle(bboxImg, pathHistory[centroid], 1, (0,255,255), 2)
+    
+    # Loop for each box
+    point,dimension,n_box = bbox.shape
+    center = []
+    for i in range(n_box):
+        x_coord = math.floor(bbox[0,0,i] + (bbox[1,0,i] - bbox[0,0,i])/2)
+        y_coord = math.floor(bbox[0,1,i] + (bbox[2,1,i] - bbox[0,1,i])/2)
+        center = np.array([x_coord, y_coord])
+        pathHistory.append(center)
+        
+    for i in range(n_box):
+        for centroid in range(len(pathHistory)):
+            bboxImg = cv2.circle(bboxImg, tuple(pathHistory[centroid]), 1, (0,255,255), 2)
                 
     return bboxImg,pathHistory
