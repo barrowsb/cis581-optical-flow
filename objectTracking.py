@@ -1,4 +1,3 @@
-
 # (INPUT) rawVideo: The input video containing one or more objects
 # (OUTPUT) trackedVideo: The generated output video showing all the tracked features (please do try to show the trajectories for all the features) on the object as well as the bounding boxes
 
@@ -21,8 +20,7 @@ def objectTracking(rawVideo):
     n_frames = int(rawVideo.get(cv2.CAP_PROP_FRAME_COUNT))
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     trackedVideo = cv2.VideoWriter('trackedVideo.avi', fourcc, fps, (width, height)) # RGB output video
-    #trackedVideo = cv2.VideoWriter('trackedVideo.avi', fourcc, fps, (width, height), 0) # Gray output video
-    
+
     # Loop Through Video Frames
     countFrame = 0
     pathHistory = []
