@@ -11,7 +11,7 @@
 import skimage.transform as tf
 import numpy as np
 
-def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox):
+def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
     
     # Max allowed pixel distance between start and new location
     threshold = 4
@@ -25,13 +25,19 @@ def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox):
     while(i < len(startXs)):
     
         # If the change in feature position exceeds 4 pixels in x or y
+        # Or if the change in position results in leaving the image dimensions
         if ((newXs[i] - startXs[i] > threshold) | (newYs[i] - startYs[i] > threshold)):
             # Elimate the Feature Point across all lists
             newXs = np.delete(newXs,i)
             newYs = np.delete(newYs,i)
             startXs = np.delete(startXs,i)
             startYs = np.delete(startYs,i)
-            
+        elif ((newXs[i] > xMax) | (newYs[i] > yMax) | (newXs[i] < 0) | (newYs[i] < 0)):
+            # Elimate the Feature Point across all lists
+            newXs = np.delete(newXs,i)
+            newYs = np.delete(newYs,i)
+            startXs = np.delete(startXs,i)
+            startYs = np.delete(startYs,i)
         # If the feature position change is acceptable
         else:
             # Sum the shifts in x and y
