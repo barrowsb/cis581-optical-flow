@@ -1,10 +1,10 @@
+
 # (INPUT) rawVideo: The input video containing one or more objects
 # (OUTPUT) trackedVideo: The generated output video showing all the tracked features (please do try to show the trajectories for all the features) on the object as well as the bounding boxes
 
 from rectangleCreation import *
 from getFeatures import *
 from estimateAllTranslation import *
-from estimateFeatureTranslation import *
 from applyGeometricTransformation import *
 from drawTrajectory import *
 import cv2
@@ -20,7 +20,7 @@ def objectTracking(rawVideo):
     n_frames = int(rawVideo.get(cv2.CAP_PROP_FRAME_COUNT))
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     trackedVideo = cv2.VideoWriter('trackedVideo.avi', fourcc, fps, (width, height)) # RGB output video
-
+    
     # Loop Through Video Frames
     countFrame = 0
     pathHistory = []
@@ -50,9 +50,6 @@ def objectTracking(rawVideo):
             
             # If this frame is after the first frame in the video
             else:               
-                # Sobel Gradient Filters
-                Ix = cv2.Sobel(grayFrame,cv2.CV_64F,1,0,ksize=5)
-                Iy = cv2.Sobel(grayFrame,cv2.CV_64F,0,1,ksize=5)
                 
                 r,c,n_box = bbox.shape
                 newbbox = np.zeros(shape=(4,2,n_box))
@@ -62,9 +59,6 @@ def objectTracking(rawVideo):
                     # Overall Translation
                     newXs,newYs = estimateAllTranslation(startXs,startYs,prevFrame,frame)
                     
-                    # Feature Translation
-                    #newX,newY = estimateFeatureTranslation(startXs,startYs,Ix,Iy,prevFrame,frame)
-                    
                     # Final Transformation of Feature Positions and Box
                     Xs,Ys,newbbox = applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,width,height)
                     
@@ -72,14 +66,9 @@ def objectTracking(rawVideo):
                     
                 if (n_box == 2):  # For 2 Boxes
                     
-                    
                     # Overall Translation
                     newXs1,newYs1 = estimateAllTranslation(startXs1,startYs1,prevFrame,frame)
                     newXs2,newYs2 = estimateAllTranslation(startXs2,startYs2,prevFrame,frame)
-                    
-                    # Feature Translation
-                    #newX,newY = estimateFeatureTranslation(startXs,startYs,Ix,Iy,prevFrame,frame)
-                    #newX,newY = estimateFeatureTranslation(startXs,startYs,Ix,Iy,prevFrame,frame)
         
                     # Final Transformation of Feature Positions and Box
                     Xs1,Ys1,newbbox[:,:,0] = applyGeometricTransformation(startXs1,startYs1,newXs1,newYs1,bbox[:,:,0],width,height)
