@@ -66,7 +66,7 @@ def objectTracking(rawVideo):
                     #newX,newY = estimateFeatureTranslation(startXs,startYs,Ix,Iy,prevFrame,frame)
                     
                     # Final Transformation of Feature Positions and Box
-                    Xs,Ys,newbbox = applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox)
+                    Xs,Ys,newbbox = applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,width,height)
                     
                     startXs,startYs = Xs,Ys
                     
@@ -82,8 +82,8 @@ def objectTracking(rawVideo):
                     #newX,newY = estimateFeatureTranslation(startXs,startYs,Ix,Iy,prevFrame,frame)
         
                     # Final Transformation of Feature Positions and Box
-                    Xs1,Ys1,newbbox[:,:,0] = applyGeometricTransformation(startXs1,startYs1,newXs1,newYs1,bbox[:,:,0])
-                    Xs2,Ys2,newbbox[:,:,1] = applyGeometricTransformation(startXs2,startYs2,newXs2,newYs2,bbox[:,:,1])
+                    Xs1,Ys1,newbbox[:,:,0] = applyGeometricTransformation(startXs1,startYs1,newXs1,newYs1,bbox[:,:,0],width,height)
+                    Xs2,Ys2,newbbox[:,:,1] = applyGeometricTransformation(startXs2,startYs2,newXs2,newYs2,bbox[:,:,1],width,height)
                 
                     startXs1,startYs1 = Xs1,Ys1
                     startXs2,startYs2 = Xs2,Ys2
