@@ -26,13 +26,13 @@ def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
     while(i < len(startXs)):
     
         # If the change in feature position exceeds 4 pixels in x or y
-        # Or if the change in position results in leaving the image dimensions
         if ((newXs[i] - startXs[i] > threshold) | (newYs[i] - startYs[i] > threshold)):
             # Elimate the Feature Point across all lists
             newXs = np.delete(newXs,i)
             newYs = np.delete(newYs,i)
             startXs = np.delete(startXs,i)
             startYs = np.delete(startYs,i)
+        # If the change in position results in leaving the image dimensions
         elif ((newXs[i] > xMax) | (newYs[i] > yMax) | (newXs[i] < 0) | (newYs[i] < 0)):
             # Elimate the Feature Point across all lists
             newXs = np.delete(newXs,i)
