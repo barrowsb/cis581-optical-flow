@@ -13,7 +13,7 @@ import cv2
 from estimateFeatureTranslation import *
 
 
-def estimateAllTranslation(startXs,startYs,img1,img2):
+def estimateAllTranslation(startXs,startYs,img1,img2): 
     
     # Convert Images to Grayscale
     img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
@@ -23,12 +23,18 @@ def estimateAllTranslation(startXs,startYs,img1,img2):
     Ix = cv2.Sobel(img1,cv2.CV_64F,1,0,ksize=5)
     Iy = cv2.Sobel(img1,cv2.CV_64F,0,1,ksize=5)
     
+    # Dimensional Parameters
+    n_rows,n_cols = img1.shape
+    n_features = startXs.shape[0] 
+
     # Feature Translation
-    newX,newY = estimateFeatureTranslation(startXs,startYs,Ix,Iy,img1,img2)
-    
-    # Translate Feature Coordinates in Bounding Boxes by Flow
-    newXs = startXs + int(flow[0])
-    newYs = startYs + int(flow[1])
-    
+    newXs = np.zeros((n_features,1))
+    newYs = np.zeros((n_features,1))
+    for i in range(n_features):
+        startX = startXs[i]
+        startY = startYs[i]
+        newX,newY = estimateFeatureTranslation(startX,startY,Ix,Iy,img1,img2)
+        newXs[i] = newX
+        newYs[i] = newY    
     
     return newXs,newYs
