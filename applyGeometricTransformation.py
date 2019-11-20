@@ -1,9 +1,10 @@
-
 # (INPUT) startXs: NxF matrix representing the starting X coordinates of all the features in the first frame for all the bounding boxes
 # (INPUT) startYs: NxF matrix representing the starting Y coordinates of all the features in the first frame for all the bounding boxes
 # (INPUT) newXs: NxF matrix representing the second X coordinates of all the features in the first frame for all the bounding boxes
 # (INPUT) newYs: NxF matrix representing the second Y coordinates of all the features in the first frame for all the bounding boxes
 # (INPUT) bbox: 4x2xF matrix representing the four new corners of the bounding box where F is the number of detected objects
+# (INPUT) xMax: Width of frame in pixels
+# (INPUT) yMax: Height of frame in pixels
 # (OUTPUT) newXs: N1xF matrix representing the X coordinates of the remaining features in all the bounding boxes after eliminating outliers
 # (OUTPUT) newYs: N1xF matrix representing the Y coordinates of the remaining features in all the bounding boxes after eliminating outliers
 # (OUTPUT) newbbox: Fx4x2 the bounding box position after geometric transformation
