@@ -31,3 +31,4 @@ rawVideo = cv2.VideoCapture(vid)
 
 # Create Tracking Video
 trackedVideo = objectTracking(rawVideo,n_boxes)
+trackedVideo.release()
