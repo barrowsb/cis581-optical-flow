@@ -11,7 +11,7 @@ import cv2
 import matplotlib.pyplot as plt
 
 
-def objectTracking(rawVideo):
+def objectTracking(rawVideo,n_boxes):
     
     # Output Video Formatting
     width = int(rawVideo.get(3))
@@ -33,10 +33,10 @@ def objectTracking(rawVideo):
             # If the video is on the first frame
             if (countFrame == 0):
                 # Create a Bounding Rectangle on the First Frame
-                bbox = rectangleCreation(frame)
+                bbox = rectangleCreation(frame,n_boxes)
     
                 # Feature Detection
-                startXs,startYs = getFeatures(grayFrame,bbox)
+                startXs,startYs = getFeatures(grayFrame,bbox,shi=True,max_pts=100)
                 r,c,n_box = bbox.shape
                 if (n_box == 2):
                     startXs1 = startXs[:,0]
