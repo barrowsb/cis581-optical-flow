@@ -38,7 +38,7 @@ def objectTracking(rawVideo,n_boxes):
                 # Feature Detection
                 startXs,startYs = getFeatures(grayFrame,bbox,shi=True,max_pts=100)
                 r,c,n_box = bbox.shape
-                if (n_box == 2):
+                if (n_box == 2): 
                     startXs1 = startXs[:,0]
                     startYs1 = startYs[:,0]
                     startXs2 = startXs[:,1]
