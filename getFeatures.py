@@ -28,9 +28,16 @@ def getFeatures(img,bbox,shi=False,max_pts=150):
         
         if shi == True:
             # Shi-Tomasi corner detector
-            cimg = cv2.goodFeaturesToTrack(window,max_pts,0.001,1)
-            x = cimg[:,:,0].astype(np.float64)
-            y = cimg[:,:,1].astype(np.float64)
+            corners = cv2.goodFeaturesToTrack(window,max_pts,0.001,2)
+
+            # Count number of corners found
+            found = corners.shape[0]
+            
+            # Convert x and y back to global image coordinates
+            feat_X[0:found,i] = corners[:,:,0].astype(np.float64).ravel() + bbox[0,0,i]
+            feat_Y[0:found,i] = corners[:,:,1].astype(np.float64).ravel() + bbox[0,1,i]
+            feat_X[found:max_pts,i] = None
+            feat_Y[found:max_pts,i] = None
             
         if shi == False:
             # Harris Corner Detector
@@ -104,8 +111,8 @@ def getFeatures(img,bbox,shi=False,max_pts=150):
             x = np.reshape(np.asarray(min_cols_sorted[0:max_pts]),(max_pts,1))
             y = np.reshape(np.asarray(min_rows_sorted[0:max_pts]),(max_pts,1))
             
-        # Convert x and y back to global image coordinates
-        feat_X[:,i] = x.ravel() + bbox[0,0,i]
-        feat_Y[:,i] = y.ravel() + bbox[0,1,i]
+            # Convert x and y back to global image coordinates
+            feat_X[:,i] = x.ravel() + bbox[0,0,i]
+            feat_Y[:,i] = y.ravel() + bbox[0,1,i]
     
     return feat_X,feat_Y
