@@ -10,11 +10,14 @@
 
 import numpy as np
 import math
+from numpy.linalg import inv
+import cv2
+from interp2 import *
 
 def estimateFeatureTranslation(startX,startY,Ix,Iy,img1,img2):
     
     # Sampling Window Side Length
-    size_window = 9
+    size_window = 50
     
     # Image Dimensions
     xMax, yMax = img1.shape
@@ -37,16 +40,16 @@ def estimateFeatureTranslation(startX,startY,Ix,Iy,img1,img2):
     sum_Iy_It = 0
     TL_x = int(x_center - math.floor(size_window/2))
     TL_y = int(y_center - math.floor(size_window/2))
-        
+    
     # Loop through window around feature
     for r in range(size_window):
         for c in range(size_window):
             if ((TL_x+r < xMax) & (TL_y+c < yMax) & (TL_x-r >= 0) & (TL_y-c >= 0)):
-                sum_Ix_Ix = sum_Ix_Ix + Ix[TL_x+r,TL_y+c] * Ix[TL_x+r,TL_y+c]
-                sum_Ix_Iy = sum_Ix_Iy + Ix[TL_x+r,TL_y+c] * Iy[TL_x+r,TL_y+c]
-                sum_Iy_Iy = sum_Iy_Iy + Iy[TL_x+r,TL_y+c] * Iy[TL_x+r,TL_y+c]
-                sum_Ix_It = sum_Ix_It + Ix[TL_x+r,TL_y+c] * It[TL_x+r,TL_y+c]
-                sum_Iy_It = sum_Iy_It + Iy[TL_x+r,TL_y+c] * It[TL_x+r,TL_y+c]
+                sum_Ix_Ix = sum_Ix_Ix + Ix[TL_y+r,TL_x+c] * Ix[TL_y+r,TL_x+c]
+                sum_Ix_Iy = sum_Ix_Iy + Ix[TL_y+r,TL_x+c] * Iy[TL_y+r,TL_x+c]
+                sum_Iy_Iy = sum_Iy_Iy + Iy[TL_y+r,TL_x+c] * Iy[TL_y+r,TL_x+c]
+                sum_Ix_It = sum_Ix_It + Ix[TL_y+r,TL_x+c] * It[TL_y+r,TL_x+c]
+                sum_Iy_It = sum_Iy_It + Iy[TL_y+r,TL_x+c] * It[TL_y+r,TL_x+c]
 
     # A Matrix in KLT Linear System Equation
     gradientMatrix = np.array([[sum_Ix_Ix, sum_Ix_Iy],[sum_Ix_Iy, sum_Iy_Iy]])
@@ -55,13 +58,14 @@ def estimateFeatureTranslation(startX,startY,Ix,Iy,img1,img2):
     temporalMatrix = -np.array([[sum_Ix_It],[sum_Iy_It]])
         
     # Solving Linear System Equation    
-    A = np.squeeze(np.transpose(gradientMatrix))
+    A = np.squeeze(np.linalg.inv(gradientMatrix))
     b = np.squeeze(temporalMatrix)
     flow = np.dot(A,b)
     
-    newX = startX + int(flow[0])
-    newY = startY + int(flow[1])
+    newX = startX + math.ceil(flow[0])
+    newY = startY + math.ceil(flow[1])
     
     #print(flow)
+    
     
     return newX,newY
