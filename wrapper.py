@@ -17,7 +17,7 @@ while True:
         break
     elif choice == 'm':
         vid = 'Medium.MP4'
-        n_boxes = 2
+        n_boxes = 1
         break
     elif choice == 'h':
         vid = 'hard.MP4'
