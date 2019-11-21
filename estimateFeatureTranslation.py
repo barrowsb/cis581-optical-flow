@@ -1,3 +1,4 @@
+
 # (INPUT) startX: Represents the starting X coordinate for a single feature in the first frame
 # (INPUT) startY: Represents the starting Y coordinate for a single feature in the first frame
 # (INPUT) Ix: HxW matrix representing the gradient along the X-direction
@@ -12,11 +13,12 @@ import math
 
 def estimateFeatureTranslation(startX,startY,Ix,Iy,img1,img2):
     
-    # Dimensional Parameters
-    n_rows,n_cols = img1.shape
-    n_features = startXs.shape  
+    # Sampling Window Side Length
     size_window = 9
     
+    # Image Dimensions
+    xMax, yMax = img1.shape
+
     # Temporal Gradient
     It = img2 - img1
     
@@ -33,16 +35,18 @@ def estimateFeatureTranslation(startX,startY,Ix,Iy,img1,img2):
     sum_Iy_Iy = np.zeros((1,1))
     sum_Ix_It = np.zeros((1,1))
     sum_Iy_It = np.zeros((1,1))
-    TL_x = x_center - math.floor(size_window/2)
-    TL_y = y_center - math.floor(size_window/2)
+    TL_x = int(x_center - math.floor(size_window/2))
+    TL_y = int(y_center - math.floor(size_window/2))
     
+    # Loop through window around feature
     for r in range(size_window):
         for c in range(size_window):
-            sum_Ix_Ix = sum_Ix_Ix + Ix[TL_y+r,TL_x+c] * Ix[TL_y+r,TL_x+c]
-            sum_Ix_Iy = sum_Ix_Iy + Ix[TL_y+r,TL_x+c] * Iy[TL_y+r,TL_x+c]
-            sum_Iy_Iy = sum_Iy_Iy + Iy[TL_y+r,TL_x+c] * Iy[TL_y+r,TL_x+c]
-            sum_Ix_It = sum_Ix_It + Ix[TL_y+r,TL_x+c] * It[TL_y+r,TL_x+c]
-            sum_Iy_It = sum_Iy_It + Iy[TL_y+r,TL_x+c] * It[TL_y+r,TL_x+c]
+            if ((TL_x+r < xMax) & (TL_y+c < yMax) & (TL_x-r >= 0) & (TL_y-c >= 0)):
+                sum_Ix_Ix = sum_Ix_Ix + Ix[TL_x+r,TL_y+c] * Ix[TL_x+r,TL_y+c]
+                sum_Ix_Iy = sum_Ix_Iy + Ix[TL_x+r,TL_y+c] * Iy[TL_x+r,TL_y+c]
+                sum_Iy_Iy = sum_Iy_Iy + Iy[TL_x+r,TL_y+c] * Iy[TL_x+r,TL_y+c]
+                sum_Ix_It = sum_Ix_It + Ix[TL_x+r,TL_y+c] * It[TL_x+r,TL_y+c]
+                sum_Iy_It = sum_Iy_It + Iy[TL_x+r,TL_y+c] * It[TL_x+r,TL_y+c]
 
     # A Matrix in KLT Linear System Equation
     gradientMatrix = np.array([[sum_Ix_Ix, sum_Ix_Iy],[sum_Ix_Iy, sum_Iy_Iy]])
@@ -57,5 +61,7 @@ def estimateFeatureTranslation(startX,startY,Ix,Iy,img1,img2):
     
     newX = startX + int(flow[0])
     newY = startY + int(flow[1])
+    
+    print(flow)
     
     return newX,newY
