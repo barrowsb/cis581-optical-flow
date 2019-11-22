@@ -1,4 +1,3 @@
-
 # (INPUT) rawVideo: The input video containing one or more objects
 # (OUTPUT) trackedVideo: The generated output video showing all the tracked features (please do try to show the trajectories for all the features) on the object as well as the bounding boxes
 
@@ -26,7 +25,8 @@ def objectTracking(rawVideo,n_boxes):
     pathHistory = []
     while(True): 
         frameFound, frame = rawVideo.read()  # Extract Current Frame
-        
+        blankFrame = np.zeros((height,width,3), dtype=np.uint8)
+
         if (frameFound):                     # If frames remain in the video
             grayFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # Convert frame to grayscale
             
@@ -86,6 +86,14 @@ def objectTracking(rawVideo,n_boxes):
             for i in range(n_box):
                 bboxImg = cv2.rectangle(indivBoxFrame, (int(bbox[0,0,i]),int(bbox[0,1,i])), (int(bbox[3,0,i]), int(bbox[3,1,i])), (0,0,255), 2)
                 indivBoxFrame = bboxImg
+            
+            # Draws the Rectangle(s) on the RGB Frame
+            point,dimension,n_box = bbox.shape
+            for i in range(n_box):
+                pureBoxes = cv2.rectangle(blankFrame, (int(bbox[0,0,i]),int(bbox[0,1,i])), (int(bbox[3,0,i]), int(bbox[3,1,i])), (0,0,255), 2)
+            
+            # Overlay the Boxes onto the Frame
+            bboxImg = cv2.add(frame,pureBoxes)
             
             # Draw persistent centroids of the bounding box for the trajectory
             bboxImg,pathHistory = drawTrajectory(bbox,bboxImg,pathHistory)
