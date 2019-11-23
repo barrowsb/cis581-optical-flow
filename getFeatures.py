@@ -7,7 +7,7 @@
 import cv2
 import numpy as np
 
-def getFeatures(img,bbox,shi=False,max_pts=150):
+def getFeatures(img,bbox,shi,max_pts):
     
     # Dimensional Parameters for Looping
     point,dimension,n_box = bbox.shape
