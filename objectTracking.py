@@ -10,7 +10,7 @@ import cv2
 import matplotlib.pyplot as plt
 
 
-def objectTracking(rawVideo,n_boxes):
+def objectTracking(rawVideo,n_boxes,max_pts,sigma,window_size):
     
     # Output Video Formatting
     width = int(rawVideo.get(3))
@@ -36,7 +36,7 @@ def objectTracking(rawVideo,n_boxes):
                 bbox = rectangleCreation(frame,n_boxes)
     
                 # Feature Detection
-                startXs,startYs = getFeatures(grayFrame,bbox,shi=True,max_pts=100)
+                startXs,startYs = getFeatures(grayFrame,bbox,shi=True,max_pts=max_pts)
                 r,c,n_box = bbox.shape
                 if (n_box == 2): 
                     startXs1 = startXs[:,0]
@@ -57,7 +57,7 @@ def objectTracking(rawVideo,n_boxes):
                 if (n_box == 1):  # For 1 Box
                     
                     # Overall Translation
-                    newXs,newYs = estimateAllTranslation(startXs,startYs,prevFrame,frame)
+                    newXs,newYs = estimateAllTranslation(startXs,startYs,prevFrame,frame,sigma=sigma,window_size=window_size)
                     
                     # Final Transformation of Feature Positions and Box
                     Xs,Ys,newbbox = applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,width,height)
@@ -67,8 +67,8 @@ def objectTracking(rawVideo,n_boxes):
                 if (n_box == 2):  # For 2 Boxes
                     
                     # Overall Translation
-                    newXs1,newYs1 = estimateAllTranslation(startXs1,startYs1,prevFrame,frame)
-                    newXs2,newYs2 = estimateAllTranslation(startXs2,startYs2,prevFrame,frame)
+                    newXs1,newYs1 = estimateAllTranslation(startXs1,startYs1,prevFrame,frame,sigma=sigma,window_size=window_size)
+                    newXs2,newYs2 = estimateAllTranslation(startXs2,startYs2,prevFrame,frame,sigma=sigma,window_size=window_size)
         
                     # Final Transformation of Feature Positions and Box
                     Xs1,Ys1,newbbox[:,:,0] = applyGeometricTransformation(startXs1,startYs1,newXs1,newYs1,bbox[:,:,0],width,height)
