@@ -1,3 +1,4 @@
+
 # (INPUT) startX: Represents the starting X coordinate for a single feature in the first frame
 # (INPUT) startY: Represents the starting Y coordinate for a single feature in the first frame
 # (INPUT) Ix: HxW matrix representing the gradient along the X-direction
@@ -9,17 +10,17 @@
 
 import numpy as np
 import math
-from numpy.linalg import inv
+from numpy.linalg import pinv
 import cv2
 from interp2 import *
 
-def estimateFeatureTranslation(startX,startY,Ix,Iy,img1,img2):
+def estimateFeatureTranslation(startX,startY,Ix,Iy,img1,img2,window_size):
     
     # Sampling Window Side Length
-    size_window = 50
+    size_window = window_size
     
     # Image Dimensions
-    xMax, yMax = img1.shape
+    yMax, xMax = img1.shape
 
     # Temporal Gradient
     It = img2 - img1
