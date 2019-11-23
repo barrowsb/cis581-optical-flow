@@ -60,7 +60,7 @@ def objectTracking(rawVideo,n_boxes,max_pts,sigma,window_size):
                     newXs,newYs = estimateAllTranslation(startXs,startYs,prevFrame,frame,sigma=sigma,window_size=window_size)
                     
                     # Final Transformation of Feature Positions and Box
-                    Xs,Ys,newbbox = applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,width,height)
+                    Xs,Ys,newbbox = applyGeometricTransformation(startXs,startYs,newXs,newYs,np.squeeze(bbox),width,height)
                     
                     startXs,startYs = Xs,Ys
                     
@@ -71,14 +71,14 @@ def objectTracking(rawVideo,n_boxes,max_pts,sigma,window_size):
                     newXs2,newYs2 = estimateAllTranslation(startXs2,startYs2,prevFrame,frame,sigma=sigma,window_size=window_size)
         
                     # Final Transformation of Feature Positions and Box
-                    Xs1,Ys1,newbbox[:,:,0] = applyGeometricTransformation(startXs1,startYs1,newXs1,newYs1,bbox[:,:,0],width,height)
-                    Xs2,Ys2,newbbox[:,:,1] = applyGeometricTransformation(startXs2,startYs2,newXs2,newYs2,bbox[:,:,1],width,height)
+                    Xs1,Ys1,newbbox[:,:,0] = applyGeometricTransformation(startXs1,startYs1,newXs1,newYs1,np.squeeze(bbox[:,:,0]),width,height)
+                    Xs2,Ys2,newbbox[:,:,1] = applyGeometricTransformation(startXs2,startYs2,newXs2,newYs2,np.squeeze(bbox[:,:,1]),width,height)
                 
                     startXs1,startYs1 = Xs1,Ys1
                     startXs2,startYs2 = Xs2,Ys2
                 
                 # Update Feature Positions and Bounding Box for Next Frame
-                bbox = newbbox
+                bbox = newbbox.reshape((4,2,n_box))
             
             # Draws the Rectangle(s) on the RGB Frame
             point,dimension,n_box = bbox.shape
