@@ -82,13 +82,6 @@ def objectTracking(rawVideo,n_boxes,max_pts,sigma,window_size):
             
             # Draws the Rectangle(s) on the RGB Frame
             point,dimension,n_box = bbox.shape
-            indivBoxFrame = frame
-            for i in range(n_box):
-                bboxImg = cv2.rectangle(indivBoxFrame, (int(bbox[0,0,i]),int(bbox[0,1,i])), (int(bbox[3,0,i]), int(bbox[3,1,i])), (0,0,255), 2)
-                indivBoxFrame = bboxImg
-            
-            # Draws the Rectangle(s) on the RGB Frame
-            point,dimension,n_box = bbox.shape
             for i in range(n_box):
                 pureBoxes = cv2.rectangle(blankFrame, (int(bbox[0,0,i]),int(bbox[0,1,i])), (int(bbox[3,0,i]), int(bbox[3,1,i])), (0,0,255), 2)
             
