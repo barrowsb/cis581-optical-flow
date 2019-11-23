@@ -1,4 +1,3 @@
-
 # (INPUT) startX: Represents the starting X coordinate for a single feature in the first frame
 # (INPUT) startY: Represents the starting Y coordinate for a single feature in the first frame
 # (INPUT) Ix: HxW matrix representing the gradient along the X-direction
@@ -44,7 +43,7 @@ def estimateFeatureTranslation(startX,startY,Ix,Iy,img1,img2):
     # Loop through window around feature
     for r in range(size_window):
         for c in range(size_window):
-            if ((TL_x+r < xMax) & (TL_y+c < yMax) & (TL_x-r >= 0) & (TL_y-c >= 0)):
+            if ((TL_x+c < xMax) & (TL_y+r < yMax) & (TL_x-c >= 0) & (TL_y-r >= 0)):
                 sum_Ix_Ix = sum_Ix_Ix + Ix[TL_y+r,TL_x+c] * Ix[TL_y+r,TL_x+c]
                 sum_Ix_Iy = sum_Ix_Iy + Ix[TL_y+r,TL_x+c] * Iy[TL_y+r,TL_x+c]
                 sum_Iy_Iy = sum_Iy_Iy + Iy[TL_y+r,TL_x+c] * Iy[TL_y+r,TL_x+c]
