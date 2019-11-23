@@ -14,15 +14,15 @@ from estimateFeatureTranslation import *
 
 
 
-def estimateAllTranslation(startXs,startYs,img1,img2): 
+def estimateAllTranslation(startXs,startYs,img1,img2,sigma,window_size): 
     
     # Convert Images to Grayscale
     img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
     img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
         
     # Blur
-    img1 = cv2.GaussianBlur(img1,(3,3),1)
-    img2 = cv2.GaussianBlur(img2,(3,3),1)
+    img1 = cv2.GaussianBlur(img1,(4*sigma+1,4*sigma+1),sigma)
+    img2 = cv2.GaussianBlur(img2,(4*sigma+1,4*sigma+1),sigma)
     
     # Sobel Gradient Filters
     Ix = cv2.Sobel(img1,cv2.CV_64F,1,0,ksize=5)
@@ -38,7 +38,7 @@ def estimateAllTranslation(startXs,startYs,img1,img2):
     for i in range(n_features):
         startX = startXs[i]
         startY = startYs[i]
-        newX,newY = estimateFeatureTranslation(startX,startY,Ix,Iy,img1,img2)
+        newX,newY = estimateFeatureTranslation(startX,startY,Ix,Iy,img1,img2,window_size)
         newXs[i] = newX
         newYs[i] = newY    
         
