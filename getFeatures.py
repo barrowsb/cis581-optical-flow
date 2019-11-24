@@ -1,6 +1,7 @@
-
 # (INPUT) img: HxW matrix representing the grayscale input image
 # (INPUT) bbox: 4x2xF matrix representing the four corners of the bounding box where F is the number of objects you would like to track
+# (INPUT) shi: Boolean indicates if using shi feature detection metho
+# (INPUT) max_pts: Integer number of the desired feature points within a bounding box
 # (OUTPUT) feat_X: NxF matrix representing the N row coordinates of the features across F objects
 # (OUTPUT) feat_Y: NxF matrix representing the N column coordinates of the features across F objects
 
