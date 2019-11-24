@@ -4,6 +4,9 @@ Assignment: 3B - Optical Flow
 Authors: Barrows, Fisher, Woc
 Date: Nov 13, 2019
 '''
+# Has user pick a video and the number of bounding boxes desired. 
+# (INPUT) rawVideo: Raw video provided for difficulty level chosen
+# (OUTPUT) trackedVideo: Final video with bounding box(es) and feature points
 
 from objectTracking import objectTracking
 import cv2
