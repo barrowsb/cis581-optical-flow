@@ -4,7 +4,7 @@
 from rectangleCreation import rectangleCreation
 from getFeatures import getFeatures
 from estimateAllTranslation import estimateAllTranslation
-from applyGeometricTransformation_Ski import applyGeometricTransformation
+from applyGeometricTransformation import applyGeometricTransformation
 from drawTrajectory import drawTrajectory
 import cv2
 import matplotlib.pyplot as plt
