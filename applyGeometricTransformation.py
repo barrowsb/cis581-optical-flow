@@ -1,4 +1,4 @@
-#
+
 # (INPUT) startXs: NxF matrix representing the starting X coordinates of all the features in the first frame for all the bounding boxes
 # (INPUT) startYs: NxF matrix representing the starting Y coordinates of all the features in the first frame for all the bounding boxes
 # (INPUT) newXs: NxF matrix representing the second X coordinates of all the features in the first frame for all the bounding boxes
@@ -13,19 +13,21 @@
 
 from skimage import transform as tf
 import numpy as np
+from rejectOutliers import *
 
 def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
     
     # Max allowed pixel distance between start and new location
-    threshold = 15
+    threshold = 10
     
-    # Loop Through Feature Points
+    # Eliminate features that behave abnormally
+    startXs,startYs,newXs,newYs = rejectOutliers(startXs,startYs,newXs,newYs)
+    
+    # Loop Through Feature Points to Remove unideal points
     i = 0
     sum_shift_x = 0
     sum_shift_y = 0
-    
     while(i < len(startXs)):
-    
         # If the change in feature position exceeds 4 pixels in x or y
         if ((newXs[i] - startXs[i] > threshold) | (newYs[i] - startYs[i] > threshold)):
             # Elimate the Feature Point across all lists
