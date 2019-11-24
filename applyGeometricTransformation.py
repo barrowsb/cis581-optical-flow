@@ -10,10 +10,9 @@
 # (OUTPUT) newYs: N1xF matrix representing the Y coordinates of the remaining features in all the bounding boxes after eliminating outliers
 # (OUTPUT) newbbox: Fx4x2 the bounding box position after geometric transformation
 
-
 from skimage import transform as tf
 import numpy as np
-from rejectOutliers import *
+#from rejectOutliers import *
 
 def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
     
@@ -21,7 +20,7 @@ def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
     threshold = 10
     
     # Eliminate features that behave abnormally
-    startXs,startYs,newXs,newYs = rejectOutliers(startXs,startYs,newXs,newYs)
+#    startXs,startYs,newXs,newYs = rejectOutliers(startXs,startYs,newXs,newYs)
     
     # Loop Through Feature Points to Remove unideal points
     i = 0
@@ -64,22 +63,6 @@ def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
     newbbox = bbox + shiftMatrix
     newbbox = np.int16(newbbox)
 
-    '''
-    # Dynamic bounding box
-    newbbox = np.zeros((4,2))
-    # Reshape startXs, startYs to match new value shape
-    startXs = startXs.reshape(-1,1)
-    startYs = startYs.reshape(-1,1)
-    # Combine X,Ys to generate 2D array 
-    start = np.hstack((startXs,startYs))
-    new = np.hstack((newXs,newYs))
-    # Calculate Transformation Matrix
-    tform=tf.estimate_transform('similarity',start,new)
-    # Warp/Transform Box to New Location
-    newbbox = tf.warp(bbox, inverse_map = tform.inverse)
-    newbbox = np.int16(newbbox)
-    '''
-    
     smallestX = 1000
     smallestY = 1000
     biggestX = 0
