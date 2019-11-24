@@ -1,4 +1,3 @@
-
 # (INPUT) startXs: NxF matrix representing the starting X coordinates of all the features in the first frame for all the bounding boxes
 # (INPUT) startYs: NxF matrix representing the starting Y coordinates of all the features in the first frame for all the bounding boxes
 # (INPUT) newXs: NxF matrix representing the second X coordinates of all the features in the first frame for all the bounding boxes
@@ -22,6 +21,9 @@ def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
     
     # Eliminate features that behave abnormally
     startXs,startYs,newXs,newYs = rejectOutliers(startXs,startYs,newXs,newYs)
+    
+    # Reject outliers
+    #startXs,startYs,newXs,newYs = rejectOutliers(startXs,startYs,newXs,newYs)
     
     # Loop Through Feature Points to Remove unideal points
     i = 0
