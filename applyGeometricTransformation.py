@@ -9,7 +9,7 @@
 # (OUTPUT) newYs: N1xF matrix representing the Y coordinates of the remaining features in all the bounding boxes after eliminating outliers
 # (OUTPUT) newbbox: Fx4x2 the bounding box position after geometric transformation
 
-import skimage.transform as tf
+from skimage import transform as tf
 import numpy as np
 
 def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
@@ -42,25 +42,59 @@ def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
         # If the feature position change is acceptable
         else:
             # Sum the shifts in x and y
-            sum_shift_x = sum_shift_x + newXs[i] - startXs[i]
-            sum_shift_y = sum_shift_y + newYs[i] - startYs[i]
+#            sum_shift_x = sum_shift_x + newXs[i] - startXs[i]
+#            sum_shift_y = sum_shift_y + newYs[i] - startYs[i]
             i += 1
     
-    # Find average of the x and y feature shifts
-    if (i != 0):
-        avg_shift_x = sum_shift_x / i
-        avg_shift_y = sum_shift_y / i
-    else:
-        avg_shift_x = 0
-        avg_shift_y = 0
-    
-    # Translate bounding box relative to feature movement
-    shiftMatrix = np.zeros((4,2))
-    shiftMatrix[:,0] = avg_shift_x
-    shiftMatrix[:,1] = avg_shift_y
-    newbbox = bbox + shiftMatrix
+#    # Find average of the x and y feature shifts
+#    if (i != 0):
+#        avg_shift_x = sum_shift_x / i
+#        avg_shift_y = sum_shift_y / i
+#    else:
+#        avg_shift_x = 0
+#        avg_shift_y = 0
+#
+#    # Mannually translate bounding box relative to feature movement
+#    shiftMatrix = np.zeros((4,2))
+#    shiftMatrix[:,0] = avg_shift_x
+#    shiftMatrix[:,1] = avg_shift_y
+#    newbbox = bbox + shiftMatrix
+#    newbbox = np.int16(newbbox)
+
+    # Dynamic bounding box
+    newbbox = np.zeros((4,2))
+    # Reshape startXs, startYs to match new value shape
+    startXs = startXs.reshape(-1,1)
+    startYs = startYs.reshape(-1,1)
+    # Combine X,Ys to generate 2D array 
+    start = np.hstack((startXs,startYs))
+    new = np.hstack((newXs,newYs))
+    # Calculate Transformation Matrix
+    tform=tf.estimate_transform('similarity',start,new)
+    # Warp/Transform Box to New Location
+    newbbox = tf.warp(bbox, inverse_map = tform.inverse)
     newbbox = np.int16(newbbox)
     
+    # Grow size of box to ensure all good points are inside
+    for i in range(len(startXs)):
+        # If point is to the left of left box boundary increase box left
+        if ((newXs[i] < newbbox[0,0]) or (newXs[i] < newbbox[2,0])) :
+            newbbox[0,0]=newXs[i]
+            newbbox[2,0]=newXs[i]
+        # If point is to the right of right box boundary increase box right  
+        if ((newXs[i] > newbbox[1,0]) or (newXs[i] > newbbox[3,0])) :
+            newbbox[1,0]=newXs[i]
+            newbbox[3,0]=newXs[i]
+        # If point is above top box boundary increase box up
+        if ((newYs[i] < newbbox[0,1]) or (newYs[i] < newbbox[2,1])) :
+            newbbox[0,1]=newYs[i]
+            newbbox[2,1]=newYs[i]
+        # If point is below bottom box boundary increase box down  
+        if ((newYs[i] > newbbox[1,1]) or (newYs[i] > newbbox[3,1])) :
+            newbbox[1,1]=newYs[i]
+            newbbox[3,1]=newYs[i]
+            
+    newbbox = np.int16(newbbox)
     
     return newXs,newYs,newbbox
 
