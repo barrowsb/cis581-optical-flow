@@ -14,7 +14,7 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 
-def objectTracking(rawVideo,n_box,max_pts=20,sigma=1,window_size=25,choice):
+def objectTracking(rawVideo,n_box,choice,max_pts=20,sigma=1,window_size=25):
     
     # Output Video Formatting
     width = int(rawVideo.get(3))
