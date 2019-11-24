@@ -10,3 +10,4 @@ Extra Credit:
     We iteratively refine our feature point flow (KLT tracker) in the file "estimateFeatureTranslation".
     We remove outliers within the bounding box based on anomalous flow compared to the average of the features.
     We tracked some human motion in the hard difficulty level video.
+    We scratch-built code to create a dynamically scaling bounding box instead of using SimilarityTransform that can be found in "applyGeometricTransformation.py".
