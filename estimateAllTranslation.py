@@ -11,8 +11,6 @@ import math
 import cv2
 from estimateFeatureTranslation import *
 
-
-
 def estimateAllTranslation(startXs,startYs,img1,img2,sigma,window_size): 
     
     # Convert Images to Grayscale
@@ -38,7 +36,6 @@ def estimateAllTranslation(startXs,startYs,img1,img2,sigma,window_size):
         startY = startYs[i]
         newX,newY = estimateFeatureTranslation(startX,startY,Ix,Iy,img1,img2,window_size)
         newXs[i] = newX
-        newYs[i] = newY    
-        
-    
+        newYs[i] = newY   
+     
     return newXs,newYs
