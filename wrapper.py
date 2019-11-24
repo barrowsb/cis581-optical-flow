@@ -39,5 +39,5 @@ while True:
 rawVideo = cv2.VideoCapture(vid)
 
 # Create Tracking Video
-trackedVideo = objectTracking(rawVideo,n_box,max_pts=20,sigma=1,window_size=25)
+trackedVideo = objectTracking(rawVideo,n_box,max_pts=20,sigma=1,window_size=25,choice)
 trackedVideo.release()
