@@ -69,7 +69,7 @@ def objectTracking(rawVideo,n_boxes,max_pts,sigma,window_size):
                     
                     startXs,startYs = Xs,Ys
                     
-                    for point in range(startXs[0]):
+                    for point in range(startXs.shape[0]):
                         featureImg = cv2.circle(featureImg, (int(startXs[point,0]),int(startYs[point,0])),2,(255,0,0),4)
                     
                 if (n_box == 2):  # For 2 Boxes
