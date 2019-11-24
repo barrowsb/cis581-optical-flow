@@ -140,8 +140,6 @@ def objectTracking(rawVideo,n_box,max_pts=20,sigma=1,window_size=25):
             
             # Iterate for frame history
             prevFrame = frame
-            if countFrame%50==0:
-                print(countFrame) 
             countFrame += 1
         
         # If no frames remain
