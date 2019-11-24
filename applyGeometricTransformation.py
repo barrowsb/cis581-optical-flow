@@ -13,7 +13,7 @@ from skimage import transform as tf
 import numpy as np
 from rejectOutliers import rejectOutliers
 
-def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
+def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax,n_box):
     
     # Max allowed pixel distance between start and new location
     threshold = 15
@@ -24,7 +24,8 @@ def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
     sum_shift_y = 0
     
     # Reject outliers
-    #startXs,startYs,newXs,newYs = rejectOutliers(startXs,startYs,newXs,newYs)
+    if n_box==1:
+        startXs,startYs,newXs,newYs = rejectOutliers(startXs,startYs,newXs,newYs)
     
     while(i < len(startXs)):
     
