@@ -1,4 +1,3 @@
-
 # (INPUT) startXs: NxF matrix representing the starting X coordinates of all the features in the first frame for all the bounding boxes
 # (INPUT) startYs: NxF matrix representing the starting Y coordinates of all the features in the first frame for all the bounding boxes
 # (INPUT) img1: HxWx3 matrix representing the first image frame
@@ -24,9 +23,8 @@ def estimateAllTranslation(startXs,startYs,img1,img2,sigma,window_size):
     img1 = cv2.GaussianBlur(img1,(4*sigma+1,4*sigma+1),sigma)
     img2 = cv2.GaussianBlur(img2,(4*sigma+1,4*sigma+1),sigma)
     
-    # Sobel Gradient Filters
-    Ix = cv2.Sobel(img1,cv2.CV_64F,1,0,ksize=5)
-    Iy = cv2.Sobel(img1,cv2.CV_64F,0,1,ksize=5)
+    # Gradient Filters
+    Iy, Ix = np.gradient(img1.astype(float))
     
     # Dimensional Parameters
     n_rows,n_cols = img1.shape
