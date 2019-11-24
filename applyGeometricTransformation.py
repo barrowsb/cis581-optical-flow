@@ -1,4 +1,4 @@
-# (INPUT) startXs: NxF matrix representing the starting X coordinates of all the features in the first frame for all the bounding boxes
+## (INPUT) startXs: NxF matrix representing the starting X coordinates of all the features in the first frame for all the bounding boxes
 # (INPUT) startYs: NxF matrix representing the starting Y coordinates of all the features in the first frame for all the bounding boxes
 # (INPUT) newXs: NxF matrix representing the second X coordinates of all the features in the first frame for all the bounding boxes
 # (INPUT) newYs: NxF matrix representing the second Y coordinates of all the features in the first frame for all the bounding boxes
@@ -11,25 +11,23 @@
 
 from skimage import transform as tf
 import numpy as np
-from rejectOutliers import *
-import math
+from rejectOutliers import rejectOutliers
 
 def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
     
     # Max allowed pixel distance between start and new location
-    threshold = 10
+    threshold = 15
     
-    # Eliminate features that behave abnormally
-    startXs,startYs,newXs,newYs = rejectOutliers(startXs,startYs,newXs,newYs)
+    # Loop Through Feature Points
+    i = 0
+    sum_shift_x = 0
+    sum_shift_y = 0
     
     # Reject outliers
     #startXs,startYs,newXs,newYs = rejectOutliers(startXs,startYs,newXs,newYs)
     
-    # Loop Through Feature Points to Remove unideal points
-    i = 0
-    sum_shift_x = 0
-    sum_shift_y = 0
     while(i < len(startXs)):
+    
         # If the change in feature position exceeds 4 pixels in x or y
         if ((newXs[i] - startXs[i] > threshold) | (newYs[i] - startYs[i] > threshold)):
             # Elimate the Feature Point across all lists
@@ -37,12 +35,6 @@ def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
             newYs = np.delete(newYs,i)
             startXs = np.delete(startXs,i)
             startYs = np.delete(startYs,i)
-#        if (math.sqrt((newXs[i]-startXs[i])**2 + (newYs[i]-startYs[i])**2)>threshold):
-#            # Elimate the Feature Point across all lists
-#            newXs = np.delete(newXs,i)
-#            newYs = np.delete(newYs,i)
-#            startXs = np.delete(startXs,i)
-#            startYs = np.delete(startYs,i)
         # If the change in position results in leaving the image dimensions
         elif ((newXs[i] > xMax) | (newYs[i] > yMax) | (newXs[i] < 0) | (newYs[i] < 0)):
             # Elimate the Feature Point across all lists
@@ -72,6 +64,22 @@ def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
     newbbox = bbox + shiftMatrix
     newbbox = np.int16(newbbox)
 
+    '''
+    # Dynamic bounding box
+    newbbox = np.zeros((4,2))
+    # Reshape startXs, startYs to match new value shape
+    startXs = startXs.reshape(-1,1)
+    startYs = startYs.reshape(-1,1)
+    # Combine X,Ys to generate 2D array 
+    start = np.hstack((startXs,startYs))
+    new = np.hstack((newXs,newYs))
+    # Calculate Transformation Matrix
+    tform=tf.estimate_transform('similarity',start,new)
+    # Warp/Transform Box to New Location
+    newbbox = tf.warp(bbox, inverse_map = tform.inverse)
+    newbbox = np.int16(newbbox)
+    '''
+    
     smallestX = 1000
     smallestY = 1000
     biggestX = 0
