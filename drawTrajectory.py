@@ -1,4 +1,3 @@
-
 # (INPUT) bbox: 4x2xF matrix of the bounding box coordinates
 # (INPUT) bboxImg: HxWx3 matrix of the current image with the bounding box
 # (INPUT) pathHistory: 2xN list of center coordinates of the bounding boxes
@@ -11,7 +10,7 @@ import numpy as np
 
 def drawTrajectory(bbox,bboxImg,pathHistory):
     
-    # Loop for each box
+    # Loop for each bounding box and append the new box center to its history
     point,dimension,n_box = bbox.shape
     center = []
     for i in range(n_box):
@@ -20,6 +19,7 @@ def drawTrajectory(bbox,bboxImg,pathHistory):
         center = np.array([x_coord, y_coord])
         pathHistory.append(center)
         
+    # Loop for each bounding box and draw a circle in the center of all boxes within history
     for i in range(n_box):
         for centroid in range(len(pathHistory)):
             bboxImg = cv2.circle(bboxImg, tuple(pathHistory[centroid]), 1, (0,255,255), 2)
