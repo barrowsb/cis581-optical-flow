@@ -80,7 +80,7 @@ def objectTracking(rawVideo,n_box,max_pts=20,sigma=1,window_size=25):
                     
                     # Visualize features
                     for point in range(startXs.shape[0]):
-                        featureImg = cv2.circle(featureImg, (int(startXs[point,0]),int(startYs[point,0])),2,(255,0,0),4)
+                        featureImg = cv2.circle(featureImg, (int(startXs[point]),int(startYs[point])),2,(255,0,0),4)
                     
                 if (n_box == 2):  # For 2 Boxes
                     
@@ -95,9 +95,9 @@ def objectTracking(rawVideo,n_box,max_pts=20,sigma=1,window_size=25):
                     startXs2,startYs2 = Xs2,Ys2
                     
                     for point in range(startXs1.shape[0]):
-                        featureImg = cv2.circle(featureImg, (int(startXs1[point,0]),int(startYs1[point,0])),2,(255,0,0),4)
+                        featureImg = cv2.circle(featureImg, (int(startXs1[point]),int(startYs1[point])),2,(255,0,0),4)
                     for point in range(startXs2.shape[0]):
-                        featureImg = cv2.circle(featureImg, (int(startXs2[point,0]),int(startYs2[point,0])),2,(255,0,0),4)
+                        featureImg = cv2.circle(featureImg, (int(startXs2[point]),int(startYs2[point])),2,(255,0,0),4)
 
                     
                 if (n_box == 3):  # For 3 Boxes
@@ -116,11 +116,11 @@ def objectTracking(rawVideo,n_box,max_pts=20,sigma=1,window_size=25):
                     startXs3,startYs3 = Xs3,Ys3
                     
                     for point in range(startXs1.shape[0]):
-                        featureImg = cv2.circle(featureImg, (int(startXs1[point,0]),int(startYs1[point,0])),2,(255,0,0),4)
+                        featureImg = cv2.circle(featureImg, (int(startXs1[point]),int(startYs1[point])),2,(255,0,0),4)
                     for point in range(startXs2.shape[0]):
-                        featureImg = cv2.circle(featureImg, (int(startXs2[point,0]),int(startYs2[point,0])),2,(255,0,0),4)
+                        featureImg = cv2.circle(featureImg, (int(startXs2[point]),int(startYs2[point])),2,(255,0,0),4)
                     for point in range(startXs3.shape[0]):
-                        featureImg = cv2.circle(featureImg, (int(startXs3[point,0]),int(startYs3[point,0])),2,(255,0,0),4)
+                        featureImg = cv2.circle(featureImg, (int(startXs3[point]),int(startYs3[point])),2,(255,0,0),4)
                 
                 # Update Feature Positions and Bounding Box for Next Frame
                 bbox = newbbox.reshape((pt,dim,n_box))
@@ -140,6 +140,8 @@ def objectTracking(rawVideo,n_box,max_pts=20,sigma=1,window_size=25):
             
             # Iterate for frame history
             prevFrame = frame
+            if countFrame%50==0:
+                print(countFrame) 
             countFrame += 1
         
         # If no frames remain
