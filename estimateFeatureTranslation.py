@@ -4,6 +4,7 @@
 # (INPUT) Iy: HxW matrix representing the gradient along the Y-direction
 # (INPUT) img1: HxWx3 matrix representing the first image frame
 # (INPUT) img2: HxWx3 matrix representing the second image frame
+# (INPUT) window_size: An integer representing the side length of the feature window
 # (OUTPUT) newX: Represents the new X coordinate for a single feature in the second frame
 # (OUTPUT) newY: Represents the new Y coordinate for a single feature in the second frame
 
