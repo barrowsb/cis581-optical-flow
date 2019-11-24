@@ -14,7 +14,7 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 
-def objectTracking(rawVideo,n_box,max_pts=20,sigma=1,window_size=25):
+def objectTracking(rawVideo,n_box,max_pts=20,sigma=1,window_size=25,choice):
     
     # Output Video Formatting
     width = int(rawVideo.get(3))
@@ -79,7 +79,7 @@ def objectTracking(rawVideo,n_box,max_pts=20,sigma=1,window_size=25):
                     newXs,newYs = estimateAllTranslation(startXs,startYs,prevFrame,frame,sigma=sigma,window_size=window_size)
                     
                     # Final Transformation of Feature Positions and Box
-                    Xs,Ys,newbbox = applyGeometricTransformation(startXs,startYs,newXs,newYs,np.squeeze(bbox),width,height,n_box)
+                    Xs,Ys,newbbox = applyGeometricTransformation(startXs,startYs,newXs,newYs,np.squeeze(bbox),width,height,n_box,choice)
                     startXs,startYs = Xs,Ys
                     
                     # Visualize features
@@ -93,8 +93,8 @@ def objectTracking(rawVideo,n_box,max_pts=20,sigma=1,window_size=25):
                     newXs2,newYs2 = estimateAllTranslation(startXs2,startYs2,prevFrame,frame,sigma=sigma,window_size=window_size)
         
                     # Final Transformation of Feature Positions and Box
-                    Xs1,Ys1,newbbox[:,:,0] = applyGeometricTransformation(startXs1,startYs1,newXs1,newYs1,np.squeeze(bbox[:,:,0]),width,height,n_box)
-                    Xs2,Ys2,newbbox[:,:,1] = applyGeometricTransformation(startXs2,startYs2,newXs2,newYs2,np.squeeze(bbox[:,:,1]),width,height,n_box)
+                    Xs1,Ys1,newbbox[:,:,0] = applyGeometricTransformation(startXs1,startYs1,newXs1,newYs1,np.squeeze(bbox[:,:,0]),width,height,n_box,choice)
+                    Xs2,Ys2,newbbox[:,:,1] = applyGeometricTransformation(startXs2,startYs2,newXs2,newYs2,np.squeeze(bbox[:,:,1]),width,height,n_box,choice)
                     startXs1,startYs1 = Xs1,Ys1
                     startXs2,startYs2 = Xs2,Ys2
                     
@@ -112,9 +112,9 @@ def objectTracking(rawVideo,n_box,max_pts=20,sigma=1,window_size=25):
                     newXs3,newYs3 = estimateAllTranslation(startXs3,startYs3,prevFrame,frame,sigma=sigma,window_size=window_size)
         
                     # Final Transformation of Feature Positions and Box
-                    Xs1,Ys1,newbbox[:,:,0] = applyGeometricTransformation(startXs1,startYs1,newXs1,newYs1,np.squeeze(bbox[:,:,0]),width,height,n_box)
-                    Xs2,Ys2,newbbox[:,:,1] = applyGeometricTransformation(startXs2,startYs2,newXs2,newYs2,np.squeeze(bbox[:,:,1]),width,height,n_box)
-                    Xs3,Ys3,newbbox[:,:,2] = applyGeometricTransformation(startXs3,startYs3,newXs3,newYs3,np.squeeze(bbox[:,:,2]),width,height,n_box)
+                    Xs1,Ys1,newbbox[:,:,0] = applyGeometricTransformation(startXs1,startYs1,newXs1,newYs1,np.squeeze(bbox[:,:,0]),width,height,n_box,choice)
+                    Xs2,Ys2,newbbox[:,:,1] = applyGeometricTransformation(startXs2,startYs2,newXs2,newYs2,np.squeeze(bbox[:,:,1]),width,height,n_box,choice)
+                    Xs3,Ys3,newbbox[:,:,2] = applyGeometricTransformation(startXs3,startYs3,newXs3,newYs3,np.squeeze(bbox[:,:,2]),width,height,n_box,choice)
                     startXs1,startYs1 = Xs1,Ys1
                     startXs2,startYs2 = Xs2,Ys2
                     startXs3,startYs3 = Xs3,Ys3
