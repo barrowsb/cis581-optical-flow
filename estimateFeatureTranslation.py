@@ -26,54 +26,59 @@ def estimateFeatureTranslation(startX,startY,Ix,Iy,img1,img2,window_size):
     x_center = startX
     y_center = startY
     
-    # Initialize Sums
-    sum_Ix_Ix = 0 
-    sum_Ix_Iy = 0
-    sum_Iy_Iy = 0
-    sum_Ix_It = 0
-    sum_Iy_It = 0
-    
-    # Meshgrid
+    # Meshgrid Creation for Window
     x_grid, y_grid = np.meshgrid(np.arange(window_size), np.arange(window_size))
+    
+    # Coordinate Calculation of Top Left of Window
     TL_x = x_center - math.floor(window_size/2)  # Top Left X Coordinate of Window
     TL_y = y_center - math.floor(window_size/2)  # Top Left Y Coordinate of Window
+    
+    # Shift Mesh Grid to Start at Top Left of Window
     x_flat_W = x_grid.ravel() + TL_x
     y_flat_W = y_grid.ravel() + TL_y
     
-    # Interpolation
+    # Interpolation of Image1, Ix, and Iy
     img1_interp = interp2(img1, x_flat_W, y_flat_W)
-    
     Ix_interp = interp2(Ix, x_flat_W, y_flat_W)
     Ix_interp.reshape(-1,1)
     Iy_interp = interp2(Iy, x_flat_W, y_flat_W)
     Iy_interp.reshape(-1,1) 
-        
+    
+    # Ix and Iy Matrix
     Ix_Iy = np.zeros((window_size*window_size,2))
     Ix_Iy[:,0] = Ix_interp
     Ix_Iy[:,1] = Iy_interp
+    
+    # Gradient Matrix (least squares fix)
     gradientMatrix = np.dot(np.transpose(Ix_Iy), Ix_Iy)    
     
-
+    # Iterate flow calculation to imrpove accuracy
     for i in range(5):
-        # Center of Window is an individual feature coordinate
-
+        # Top Left of Window
         TL_x = x_center - math.floor(window_size/2)  # Top Left X Coordinate of Window
         TL_y = y_center - math.floor(window_size/2)  # Top Left Y Coordinate of Window
+        
+        # Shift Mesh Grid
         x_flat_W = x_grid.ravel() + TL_x
         y_flat_W = y_grid.ravel() + TL_y
 
+        # Interpolation
         img2_interp = interp2(img2, x_flat_W, y_flat_W)
+        
+        # Temporal Matrix
         It = img2_interp - img1_interp 
-        temporalMatrix = -np.dot(np.transpose(Ix_Iy), It)
+        temporalMatrix = -np.dot(np.transpose(Ix_Iy), It)  # Satisfying equation
         
         # Solving Linear System Equation    
         A = np.squeeze(np.linalg.pinv(gradientMatrix))
         b = np.squeeze(temporalMatrix)
         flow = np.dot(A,b)
         
+        # Update feature location
         x_center = x_center + (flow[0])
         y_center = y_center + (flow[1])        
     
+    # Final feature flow 
     newX = x_center
     newY = y_center
     
