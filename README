@@ -5,3 +5,7 @@ Brian Barrows, Zachary Fisher, Michael Woc
 Run our optical flow code using the "wrapper.py" file. After running, the console will request a video selection and number of bounding boxes to create. Draw a box over an individual object, press "Enter" on your keyboard, and repeat for the number of bounding boxes you chose to create. The output video will be saved to the corresponding folder with the title "trackedVideo.avi".
 
 The bounding boxes are in red, the feature points of each individual frame are in blue, and a single trajectory path per bounding box is indicated in yellow. We elected to show the trajectory with a single indicator instead of persisting the features for improved visibility in the video and a clearer understanding of the general trajectory. 
+
+Extra Credit:
+    We iteratively refine our feature point flow (KLT tracker) in the file "estimateFeatureTranslation".
+    We remove outliers within the bounding box based on anomalous flow compared to the average of the features.
