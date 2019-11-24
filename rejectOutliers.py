@@ -2,6 +2,7 @@
 # (INPUT) starYs: NxF matrix representing the starting Y coordinates of all the features in the first frame for all the bounding boxes
 # (INPUT) newXs: NxF matrix representing the new X coordinates of all the features in all the bounding boxes
 # (INPUT) newYs: NxF matrix representing the new Y coordinates of all the features in all the bounding boxes
+# (INPUT) m: Number of standard deviations
 # (OUTPUT) startXs: NxF matrix representing the starting X coordinates of all the features in the first frame for all the bounding boxes without outliers
 # (OUTPUT) starYs: NxF matrix representing the starting Y coordinates of all the features in the first frame for all the bounding boxes without outliers
 # (OUTPUT) newXs: NxF matrix representing the new X coordinates of all the features in all the bounding boxes without outliers
