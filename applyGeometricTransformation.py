@@ -22,7 +22,6 @@ def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
     sum_shift_x = 0
     sum_shift_y = 0
     
-
     while(i < len(startXs)):
     
         # If the change in feature position exceeds 4 pixels in x or y
@@ -42,25 +41,26 @@ def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
         # If the feature position change is acceptable
         else:
             # Sum the shifts in x and y
-#            sum_shift_x = sum_shift_x + newXs[i] - startXs[i]
-#            sum_shift_y = sum_shift_y + newYs[i] - startYs[i]
+            sum_shift_x = sum_shift_x + newXs[i] - startXs[i]
+            sum_shift_y = sum_shift_y + newYs[i] - startYs[i]
             i += 1
     
-#    # Find average of the x and y feature shifts
-#    if (i != 0):
-#        avg_shift_x = sum_shift_x / i
-#        avg_shift_y = sum_shift_y / i
-#    else:
-#        avg_shift_x = 0
-#        avg_shift_y = 0
-#
-#    # Mannually translate bounding box relative to feature movement
-#    shiftMatrix = np.zeros((4,2))
-#    shiftMatrix[:,0] = avg_shift_x
-#    shiftMatrix[:,1] = avg_shift_y
-#    newbbox = bbox + shiftMatrix
-#    newbbox = np.int16(newbbox)
+    # Find average of the x and y feature shifts
+    if (i != 0):
+        avg_shift_x = sum_shift_x / i
+        avg_shift_y = sum_shift_y / i
+    else:
+        avg_shift_x = 0
+        avg_shift_y = 0
 
+    # Mannually translate bounding box relative to feature movement
+    shiftMatrix = np.zeros((4,2))
+    shiftMatrix[:,0] = avg_shift_x
+    shiftMatrix[:,1] = avg_shift_y
+    newbbox = bbox + shiftMatrix
+    newbbox = np.int16(newbbox)
+
+    '''
     # Dynamic bounding box
     newbbox = np.zeros((4,2))
     # Reshape startXs, startYs to match new value shape
@@ -74,6 +74,7 @@ def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
     # Warp/Transform Box to New Location
     newbbox = tf.warp(bbox, inverse_map = tform.inverse)
     newbbox = np.int16(newbbox)
+    '''
     
     # Grow size of box to ensure all good points are inside
     for i in range(len(startXs)):
@@ -97,4 +98,3 @@ def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
     newbbox = np.int16(newbbox)
     
     return newXs,newYs,newbbox
-
