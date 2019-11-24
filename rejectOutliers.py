@@ -2,7 +2,7 @@ import numpy as np
 
 def rejectOutliers(startXs,startYs,newXs,newYs,m=2):
     
-    print(startXs.shape)
+#    print(startXs.shape)
     
     if startXs.shape[0]>6:
         dist = np.zeros(shape=startXs.shape,dtype=np.float16)
@@ -25,7 +25,7 @@ def rejectOutliers(startXs,startYs,newXs,newYs,m=2):
 #    print(np.mean(dist))
 #    print(np.std(dist))
 #    print(inliers)
-    print(startXs.shape)
-    print()
+#    print(startXs.shape)
+#    print()
     
     return startXs,startYs,newXs,newYs
