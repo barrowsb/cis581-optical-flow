@@ -7,8 +7,6 @@
 # (OUTPUT) newX: Represents the new X coordinate for a single feature in the second frame
 # (OUTPUT) newY: Represents the new Y coordinate for a single feature in the second frame
 
-
-
 import numpy as np
 import math
 from numpy.linalg import pinv
@@ -47,10 +45,9 @@ def estimateFeatureTranslation(startX,startY,Ix,Iy,img1,img2,window_size):
     Ix_Iy[:,1] = Iy_interp
     gradientMatrix = np.dot(np.transpose(Ix_Iy), Ix_Iy)    
     
-
     for i in range(5):
+        
         # Center of Window is an individual feature coordinate
-
         TL_x = x_center - math.floor(window_size/2)  # Top Left X Coordinate of Window
         TL_y = y_center - math.floor(window_size/2)  # Top Left Y Coordinate of Window
         x_flat_W = x_grid.ravel() + TL_x
