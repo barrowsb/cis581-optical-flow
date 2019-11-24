@@ -12,7 +12,8 @@
 
 from skimage import transform as tf
 import numpy as np
-#from rejectOutliers import *
+from rejectOutliers import *
+import math
 
 def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
     
@@ -20,7 +21,7 @@ def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
     threshold = 10
     
     # Eliminate features that behave abnormally
-#    startXs,startYs,newXs,newYs = rejectOutliers(startXs,startYs,newXs,newYs)
+    startXs,startYs,newXs,newYs = rejectOutliers(startXs,startYs,newXs,newYs)
     
     # Loop Through Feature Points to Remove unideal points
     i = 0
@@ -34,6 +35,12 @@ def applyGeometricTransformation(startXs,startYs,newXs,newYs,bbox,xMax,yMax):
             newYs = np.delete(newYs,i)
             startXs = np.delete(startXs,i)
             startYs = np.delete(startYs,i)
+#        if (math.sqrt((newXs[i]-startXs[i])**2 + (newYs[i]-startYs[i])**2)>threshold):
+#            # Elimate the Feature Point across all lists
+#            newXs = np.delete(newXs,i)
+#            newYs = np.delete(newYs,i)
+#            startXs = np.delete(startXs,i)
+#            startYs = np.delete(startYs,i)
         # If the change in position results in leaving the image dimensions
         elif ((newXs[i] > xMax) | (newYs[i] > yMax) | (newXs[i] < 0) | (newYs[i] < 0)):
             # Elimate the Feature Point across all lists
