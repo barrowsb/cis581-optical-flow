@@ -25,6 +25,13 @@ def estimateFeatureTranslation(startX,startY,Ix,Iy,img1,img2,window_size):
     x_center = startX
     y_center = startY
     
+    # Initialize Sums
+    sum_Ix_Ix = 0 
+    sum_Ix_Iy = 0
+    sum_Iy_Iy = 0
+    sum_Ix_It = 0
+    sum_Iy_It = 0
+    
     # Meshgrid
     x_grid, y_grid = np.meshgrid(np.arange(window_size), np.arange(window_size))
     TL_x = x_center - math.floor(window_size/2)  # Top Left X Coordinate of Window
@@ -45,9 +52,10 @@ def estimateFeatureTranslation(startX,startY,Ix,Iy,img1,img2,window_size):
     Ix_Iy[:,1] = Iy_interp
     gradientMatrix = np.dot(np.transpose(Ix_Iy), Ix_Iy)    
     
+
     for i in range(5):
-        
         # Center of Window is an individual feature coordinate
+
         TL_x = x_center - math.floor(window_size/2)  # Top Left X Coordinate of Window
         TL_y = y_center - math.floor(window_size/2)  # Top Left Y Coordinate of Window
         x_flat_W = x_grid.ravel() + TL_x
