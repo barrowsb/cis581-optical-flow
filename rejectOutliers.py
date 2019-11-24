@@ -1,8 +1,15 @@
+# (INPUT) startXs: NxF matrix representing the starting X coordinates of all the features in the first frame for all the bounding boxes
+# (INPUT) starYs: NxF matrix representing the starting Y coordinates of all the features in the first frame for all the bounding boxes
+# (INPUT) newXs: NxF matrix representing the new X coordinates of all the features in all the bounding boxes
+# (INPUT) newYs: NxF matrix representing the new Y coordinates of all the features in all the bounding boxes
+# (OUTPUT) startXs: NxF matrix representing the starting X coordinates of all the features in the first frame for all the bounding boxes without outliers
+# (OUTPUT) starYs: NxF matrix representing the starting Y coordinates of all the features in the first frame for all the bounding boxes without outliers
+# (OUTPUT) newXs: NxF matrix representing the new X coordinates of all the features in all the bounding boxes without outliers
+# (OUTPUT) newYs: NxF matrix representing the new Y coordinates of all the features in all the bounding boxes without outliers
+
 import numpy as np
 
 def rejectOutliers(startXs,startYs,newXs,newYs,m=2):
-    
-#    print(startXs.shape)
     
     if startXs.shape[0]>6:
         dist = np.zeros(shape=startXs.shape,dtype=np.float16)
@@ -21,11 +28,5 @@ def rejectOutliers(startXs,startYs,newXs,newYs,m=2):
         newXs = np.expand_dims(newXs,axis=1)
         newYs = np.expand_dims(newYs,axis=1)
         
-#    print(dist)
-#    print(np.mean(dist))
-#    print(np.std(dist))
-#    print(inliers)
-#    print(startXs.shape)
-#    print()
-    
+
     return startXs,startYs,newXs,newYs
