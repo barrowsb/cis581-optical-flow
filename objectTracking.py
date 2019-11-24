@@ -1,5 +1,9 @@
 # (INPUT) rawVideo: The input video containing one or more objects
-# (OUTPUT) trackedVideo: The generated output video showing all the tracked features (please do try to show the trajectories for all the features) on the object as well as the bounding boxes
+# (INPUT) n_box: The number of bounding boxes
+# (INPUT) max_pts: Maximum number of points to be tracked
+# (INPUT) sigma: Standard deviation for Gaussian blur
+# (INPUT) window_size: Size of window around each feature point to be analyzed for feature tracking
+# (OUTPUT) trackedVideo: The generated output video showing all the tracked features,bounding boxes, and a feature's trajectory
 
 from rectangleCreation import rectangleCreation
 from getFeatures import getFeatures
